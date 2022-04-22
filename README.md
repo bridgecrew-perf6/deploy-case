@@ -4,7 +4,7 @@ Deploy case using ansible and dokcer container.
 
 ## Description
 
-This is a project for a case study.
+This is a project for a case study. The idea was to catch login attempts from alphaclient `(/var/log/auth.log)` either it's success or failed, and send it to alphaserver every 1 minute. The deployment setup automation created using ansible and nodes container using docker.
 
 ## Getting Started
 
@@ -47,6 +47,7 @@ ssh root@[YOUR_IP_INVENTORY] -p 2248
 ```
 
 * Web-stat metric for every attempt that happen on alphaclient 1 or alphaclient available through `http://[YOUR_IP_INVENTORY]`
+![ScreenShot](/screenshots/hasil.png)
 
 
 ## Help
