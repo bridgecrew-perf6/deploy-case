@@ -19,6 +19,14 @@ This is a project for a case study. The idea was to catch login attempts from al
 * If you're about to deploy step by step, please start every `ansible-playbook` begin from `preparation` folder and then `setup_nodes` folder.
 * Single deployment using `deploy.yaml`
 * Please set your host machine at `inventory` 
+```
+[assignment]
+10.10.10.27 #Your machine password
+
+[assignment:vars]
+ansible_ssh_user={YOUR_SSH_USERNAME}
+#ansible_ssh_password= {YOUR_PASSWORD} #Use this if you are not using ssh keys, but not recommended
+```
 * Every attempt on alphaclient nodes, will send to alphaserver every minute
 
 ### Executing program
@@ -55,8 +63,6 @@ ssh root@[YOUR_IP_INVENTORY] -p 2248
 Any advise for common problems or issues please contact your administrators.
 
 ## Authors
-
-Contributors names and contact info
 
 Rizky Eka Maulana  
 [@rizekamaulana](https://twitter.com/rizekamaulana)
