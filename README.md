@@ -1,4 +1,4 @@
-# Project Title
+# Deploy Case SSH Attempts
 
 Deploy case using ansible and dokcer container.
 
@@ -46,7 +46,7 @@ ansible-playbook -i inventory setup_nodes/alphaclient/alphaclient-2.yaml
 ansible-playbook -i inventory deploy.yaml -K
 ```
 
-## Testing
+### Testing
 
 * Try to access ssh on alphaclient 1 (port 2246) or alphaclient 2 (port 2248) using IP Address from your inventory
 ```
