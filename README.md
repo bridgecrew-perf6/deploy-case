@@ -19,33 +19,35 @@ This is a project for a case study.
 * If you're about to deploy step by step, please start every `ansible-playbook` begin from `preparation` folder and then `setup_nodes` folder.
 * Single deployment using `deploy.yaml`
 * Please set your host machine at `inventory` 
+* Every attempt on alphaclient nodes, will send to alphaserver every minute
 
 ### Executing program
 
 * Chain deployment
-* Step-by-step bullets
+* Step by step development
 ```
 ansible-playbook -i inventory preparation/install_docker.yaml -K
-```
-```
 ansible-playbook -i inventory preparation/pull_image_httpd.yaml
-```
-```
 ansible-playbook -i inventory preparation/pull_image_ssh.yaml
-```
-```
 ansible-playbook -i inventory setup_nodes/alphaserver/alphaserver.yaml
-```
-```
 ansible-playbook -i inventory setup_nodes/alphaclient/alphaclient-1.yaml
-```
-```
 ansible-playbook -i inventory setup_nodes/alphaclient/alphaclient-2.yaml
 ```
 * Single deployment
 ```
 ansible-playbook -i inventory deploy.yaml -K
 ```
+
+## Testing
+
+* Try to access ssh on alphaclient 1 (port 2246) or alphaclient 2 (port 2248) using IP Address from your inventory
+```
+ssh root@[YOUR_IP_INVENTORY] -p 2246
+ssh root@[YOUR_IP_INVENTORY] -p 2248
+```
+
+* Web-stat metric for every attempt that happen on alphaclient 1 or alphaclient available through `http://[YOUR_IP_INVENTORY]`
+
 
 ## Help
 
