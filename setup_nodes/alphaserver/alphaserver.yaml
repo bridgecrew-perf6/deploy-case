@@ -33,7 +33,7 @@
   - name: clean
     community.docker.docker_container_exec:
       container: apache-php
-      command: rm -rf var/www/html/*
+      command: rm -rf var/www/html/* var/www/html/index.php var/www/html/push.php var/www/html/.git/ var/www/html/index.html var/www/html/log/
 
   - name: git clone
     community.docker.docker_container_exec:
