@@ -1,0 +1,6 @@
+[assignment]
+10.10.10.27 #Your machine password
+
+[assignment:vars]
+ansible_ssh_user=holahop
+#ansible_ssh_password= {YOUR_PASSWORD} #Use this if you not using ssh keys, but not recommended

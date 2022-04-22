@@ -1,0 +1,35 @@
+---
+- name: Create ssh client
+  hosts: assignment
+
+  tasks:
+  - name: Build image
+    docker_container:
+      name: ssh-node1
+      image: unixtastic/git-ssh-server
+      state: started
+      ports:
+        - "2246:22"
+      tty: true
+      detach: true
+      restart_policy: always
+  
+  - name: clean tmp
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: rm -rf tmp/* tmp/ssh-intruder/
+
+  - name: git clone
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: git clone https://github.com/perjakatambuns/ssh-intruder.git /tmp/ssh-intruder/
+  
+  - name: permisson intruder.sh
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: chmod +x /tmp/ssh-intruder/intruder.sh
+
+  - name: run
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: bash /tmp/ssh-intruder/intruder.sh http://{{ ansible_ssh_host }}/

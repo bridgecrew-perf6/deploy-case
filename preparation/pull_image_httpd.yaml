@@ -1,0 +1,8 @@
+---
+- name: Pull apache php server
+  hosts: assignment
+
+  tasks:
+  - name: pull
+    docker_image:
+      name: ubuntu/apache2

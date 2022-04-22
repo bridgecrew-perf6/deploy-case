@@ -1,0 +1,51 @@
+---
+- name: HTTPD Server
+  hosts: assignment
+
+  tasks:
+  - name: Build image
+    docker_container:
+      name: apache-php
+      image: ubuntu/apache2
+      state: started
+      ports:
+        - "80:80"
+      tty: true
+      detach: true
+      restart_policy: always
+
+      #/usr/local/apache2/htdocs
+  - name: apt update
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: apt-get update -y
+
+  - name: install git php
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: apt-get install git php libapache2-mod-php -y
+  
+  - name: restart apache
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: service apache2 reload  
+
+  - name: remove index
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: rm var/www/html/index.html
+  
+  - name: clean
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: rm -rf var/www/html/*
+
+  - name: git clone
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: git clone https://github.com/perjakatambuns/simple-web-push.git /var/www/html/
+
+  - name: save file permission
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: chmod 777 -R /var/www/html/

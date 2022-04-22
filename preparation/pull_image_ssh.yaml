@@ -1,0 +1,8 @@
+---
+- name: Pull ssh git image
+  hosts: assignment
+
+  tasks:
+  - name: pull
+    docker_image:
+      name: unixtastic/git-ssh-server

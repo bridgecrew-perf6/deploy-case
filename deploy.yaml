@@ -1,0 +1,168 @@
+---
+- hosts: assignment
+  
+  become: yes
+  tasks:
+
+  # Install Docker
+  # --
+  # 
+  - name: install prerequisites
+    apt:
+      name:
+        - apt-transport-https
+        - ca-certificates 
+        - curl 
+        - gnupg-agent
+        - software-properties-common
+      update_cache: yes
+
+  - name: add apt-key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+
+  - name: add docker repo
+    apt_repository:
+      repo: deb https://download.docker.com/linux/ubuntu focal stable
+
+  - name: install docker 
+    apt:
+      name: 
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+      update_cache: yes
+
+  - name: add userpermissions
+    shell: "usermod -aG docker {{ lookup('env','USER') }}"
+
+  # Installs Docker SDK
+  # --
+  # 
+  - name: install python package manager
+    apt:
+      name: python3-pip
+  
+  - name: install python sdk
+    become_user: "{{ lookup('env','USER') }}"
+    pip:
+      name:
+        - docker
+        - docker-compose
+  
+  - name: pull alphaserver image
+    docker_image:
+      name: ubuntu/apache2
+
+  - name: pull alphaclient image
+    docker_image:
+      name: unixtastic/git-ssh-server
+  
+  - name: Build alphaserver
+    docker_container:
+      name: apache-php
+      image: ubuntu/apache2
+      state: started
+      ports:
+        - "80:80"
+      tty: true
+      detach: true
+      restart_policy: always
+
+      #/usr/local/apache2/htdocs
+  - name: apt update
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: apt-get update -y
+
+  - name: install git php
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: apt-get install git php libapache2-mod-php -y
+  
+  - name: restart apache
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: service apache2 reload  
+
+  - name: remove index
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: rm var/www/html/index.html
+  
+  - name: clean
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: rm -rf var/www/html/*
+
+  - name: git clone
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: git clone https://github.com/perjakatambuns/simple-web-push.git /var/www/html/
+
+  - name: save file permission
+    community.docker.docker_container_exec:
+      container: apache-php
+      command: chmod 777 -R /var/www/html/
+  
+  - name: Build Alphaclient node1
+    docker_container:
+      name: ssh-node1
+      image: unixtastic/git-ssh-server
+      state: started
+      ports:
+        - "2246:22"
+      tty: true
+      detach: true
+      restart_policy: always
+  
+  - name: clean tmp
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: rm -rf tmp/* tmp/ssh-intruder/
+
+  - name: git clone
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: git clone https://github.com/perjakatambuns/ssh-intruder.git /tmp/ssh-intruder/
+  
+  - name: permisson intruder.sh
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: chmod +x /tmp/ssh-intruder/intruder.sh
+
+  - name: run
+    community.docker.docker_container_exec:
+      container: ssh-node1
+      command: bash /tmp/ssh-intruder/intruder.sh http://{{ ansible_ssh_host }}/
+  
+  - name: Build alphaclient node2
+    docker_container:
+      name: ssh-node3
+      image: unixtastic/git-ssh-server
+      state: started
+      ports:
+        - "2248:22"
+      tty: true
+      detach: true
+      restart_policy: always
+  
+  - name: clean tmp
+    community.docker.docker_container_exec:
+      container: ssh-node3
+      command: rm -rf tmp/* tmp/ssh-intruder/
+
+  - name: git clone
+    community.docker.docker_container_exec:
+      container: ssh-node3
+      command: git clone https://github.com/perjakatambuns/ssh-intruder.git /tmp/ssh-intruder/
+  
+  - name: permisson intruder.sh
+    community.docker.docker_container_exec:
+      container: ssh-node3
+      command: chmod +x /tmp/ssh-intruder/intruder.sh
+
+  - name: run
+    community.docker.docker_container_exec:
+      container: ssh-node3
+      command: bash /tmp/ssh-intruder/intruder.sh http://{{ ansible_ssh_host }}/
