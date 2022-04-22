@@ -21,17 +21,16 @@ This is a project for a case study. The idea was to catch login attempts from al
 * Please set your host machine at `inventory` 
 ```
 [assignment]
-10.10.10.27 #Your machine password
+10.10.10.27 #Your remote machine IP Address
 
 [assignment:vars]
-ansible_ssh_user={YOUR_SSH_USERNAME}
+ansible_ssh_user= {YOUR_SSH_USERNAME}
 #ansible_ssh_password= {YOUR_PASSWORD} #Use this if you are not using ssh keys, but not recommended
 ```
 * Every attempt on alphaclient nodes, will send to alphaserver every minute
 
 ### Executing program
 
-* Chain deployment
 * Step by step development
 ```
 ansible-playbook -i inventory preparation/install_docker.yaml -K
