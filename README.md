@@ -46,7 +46,7 @@ ssh root@[YOUR_IP_INVENTORY] -p 2246
 ssh root@[YOUR_IP_INVENTORY] -p 2248
 ```
 
-* Web-stat metric for every attempt that happen on alphaclient 1 or alphaclient available through `http://[YOUR_IP_INVENTORY]`
+* Web-stat metric for every attempt that happen on alphaclient 1 or alphaclient 2 available through `http://[YOUR_IP_INVENTORY]`
 ![ScreenShot](/screenshots/hasil.png)
 
 
@@ -58,7 +58,7 @@ Any advise for common problems or issues please contact your administrators.
 
 Contributors names and contact info
 
-Rizky Maulana  
+Rizky Eka Maulana  
 [@rizekamaulana](https://twitter.com/rizekamaulana)
 
 ## Version History
