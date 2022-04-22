@@ -84,11 +84,6 @@
     community.docker.docker_container_exec:
       container: apache-php
       command: service apache2 reload  
-
-  - name: remove index
-    community.docker.docker_container_exec:
-      container: apache-php
-      command: rm var/www/html/index.html
   
   - name: clean
     community.docker.docker_container_exec:
